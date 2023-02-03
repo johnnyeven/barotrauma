@@ -10,9 +10,12 @@ type Wiring struct {
 	Component
 }
 
-func NewWiring(name string) Wiring {
+func NewWiring(name string, pc int64, d int64) Wiring {
 	return Wiring{
-		Component: NewComponent(name),
+		PowerConsumption: pc,
+		Durability:       d,
+		IO:               NewIO(),
+		Component:        NewComponent(name),
 	}
 }
 
