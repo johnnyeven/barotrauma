@@ -22,3 +22,6 @@ func (c *Component) Id() string {
 func (c *Component) Name() string {
 	return c.name
 }
+
+func (c *Component) Update(timestamp int64) {
+}

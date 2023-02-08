@@ -24,6 +24,8 @@ func NewWiring(name string, pc int64, d int64) Wiring {
 
 func (w *Wiring) Update(timestamp int64) {
 	if !w.IsWorking {
+		w.Component.Update(timestamp)
+		w.IO.Update(timestamp)
 		return
 	}
 }
