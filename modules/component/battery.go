@@ -1,5 +1,16 @@
 package component
 
+const (
+	BatteryInputFireWire         = 0
+	BatteryInputRechargeRate     = 1
+	BatteryOutputFireWire        = 0
+	BatteryOutputCapacity        = 1
+	BatteryOutputQuantity        = 2
+	BatteryOutputChargeRate      = 3
+	BatteryOutputCurrentOutput   = 4
+	BatteryOutputCurrentRecharge = 5
+)
+
 // Battery 电池
 type Battery struct {
 	// 最大蓄电量
@@ -94,30 +105,49 @@ func (b *Battery) Update(timestamp int64) {
 
 // 输入充电率
 func (b *Battery) handleInputRechargeRate() error {
+	if w := b.Input[BatteryInputRechargeRate]; w != nil {
+		b.rechargeRate = float64(w.GetSignalOutput()) / 100
+		b.currentRecharge = int64(float64(b.maxRecharge) * b.rechargeRate)
+	}
 	return nil
 }
 
 // 输出当前电量
 func (b *Battery) handleOutputQuantity() error {
+	if w := b.Input[BatteryOutputQuantity]; w != nil {
+		w.SetSignalInput(b.quantity)
+	}
 	return nil
 }
 
 // 输出最大电量
 func (b *Battery) handleOutputCapacity() error {
+	if w := b.Input[BatteryOutputCapacity]; w != nil {
+		w.SetSignalInput(b.capacity)
+	}
 	return nil
 }
 
 // 输出每秒充电量
 func (b *Battery) handleOutputCurrentRecharge() error {
+	if w := b.Input[BatteryOutputCurrentRecharge]; w != nil {
+		w.SetSignalInput(b.currentRecharge)
+	}
 	return nil
 }
 
 // 输出每秒输出量
 func (b *Battery) handleOutputCurrentOutput() error {
+	if w := b.Input[BatteryOutputCurrentOutput]; w != nil {
+		w.SetSignalInput(b.currentOutput)
+	}
 	return nil
 }
 
 // 输出当前充电率
 func (b *Battery) handleOutputChargeRate() error {
+	if w := b.Input[BatteryOutputChargeRate]; w != nil {
+		w.SetSignalInput(int64(b.rechargeRate * 100))
+	}
 	return nil
 }
