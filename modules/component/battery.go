@@ -46,6 +46,18 @@ func NewBattery(durability int64, storage int64) *Battery {
 	return instance
 }
 
+func (b *Battery) AttachInput(slot int, w *Wire) *Battery {
+	b.IO.AttachInput(slot, w)
+	w.SetOutput(b)
+	return b
+}
+
+func (b *Battery) AttachOutput(slot int, w *Wire) *Battery {
+	b.IO.AttachOutput(slot, w)
+	w.SetInput(b)
+	return b
+}
+
 func (b *Battery) Capacity() int64 {
 	return b.capacity
 }

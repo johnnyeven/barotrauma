@@ -6,15 +6,15 @@ type IOHandler func() error
 
 // IO 输入输出管理
 type IO struct {
-	Input    []*Wire
-	Output   []*Wire
+	Input    map[int]*Wire
+	Output   map[int][]*Wire
 	handlers []IOHandler
 }
 
 func NewIO() IO {
 	return IO{
-		Input:  make([]*Wire, 0),
-		Output: make([]*Wire, 0),
+		Input:  make(map[int]*Wire),
+		Output: make(map[int][]*Wire),
 	}
 }
 
@@ -23,13 +23,16 @@ func (io *IO) AddHandler(h func() error) *IO {
 	return io
 }
 
-func (io *IO) AttachInput(w *Wire) *IO {
-	io.Input = append(io.Input, w)
+func (io *IO) AttachInput(slot int, w *Wire) *IO {
+	io.Input[slot] = w
 	return io
 }
 
-func (io *IO) AttachOutput(w *Wire) *IO {
-	io.Output = append(io.Output, w)
+func (io *IO) AttachOutput(slot int, w *Wire) *IO {
+	if _, ok := io.Output[slot]; !ok {
+		io.Output[slot] = make([]*Wire, 0)
+	}
+	io.Output[slot] = append(io.Output[slot], w)
 	return io
 }
 
